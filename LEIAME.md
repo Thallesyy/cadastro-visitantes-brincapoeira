@@ -27,8 +27,7 @@ Abra `index.html`, procure `SCRIPT_URL: ""` (perto do fim do arquivo) e cole a U
 
 ## 4. Colocar no ar
 
-Mesmo esquema do cadastro principal: repositório no GitHub + GitHub Pages (ou Vercel).
-Sugestão de endereço: `visitantes.brincapoeira.com` (registro CNAME `visitantes` → `thallesyy.github.io` na Hostinger).
+Publicado na Vercel (deploy automático a cada push no GitHub).
 
 ## Planilha
 
