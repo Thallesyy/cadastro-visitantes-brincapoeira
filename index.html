@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cadastro de Visitantes · Brincapoeira</title>
+<meta name="description" content="Cadastro de capoeiristas visitantes de outros grupos para o Batizado do Projeto Brincapoeira — Capoeira Porto Bahia.">
+<meta name="theme-color" content="#0E5A33">
+<meta property="og:title" content="Cadastro de Visitantes · Batizado Brincapoeira">
+<meta property="og:description" content="28 de novembro · 9h às 12h · IFSul Campus Sapucaia do Sul. Cadastro para capoeiristas de outros grupos.">
+<meta property="og:image" content="logo.png">
+<link rel="icon" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --red:#E3262B; --green:#22A447; --blue:#2F3BC4; --deep:#0E5A33;
+  --yellow:#F6B21B; --orange:#E86E1C; --cream:#FBF4E4; --cream-2:#F5EAD0;
+  --card:#FFFFFF; --ink:#1D2A22; --muted:#5C6A61; --line:#E6D9BC; --error:#C81E25;
+  --radius:18px;
+  --shadow:0 1px 2px rgba(14,90,51,.06), 0 8px 28px rgba(14,90,51,.10);
+  color-scheme: light;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;font-family:"Nunito",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  color:var(--ink);background:var(--cream);
+  background-image:
+    radial-gradient(circle at 0% 0%, rgba(246,178,27,.18), transparent 40%),
+    radial-gradient(circle at 100% 30%, rgba(47,59,196,.08), transparent 40%);
+  background-attachment:fixed;line-height:1.45;min-height:100vh;
+}
+h1,h2,h3{font-family:"Baloo 2","Nunito",sans-serif;line-height:1.1;margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+[hidden]{display:none!important}
+
+.tri{
+  height:22px;background-color:var(--red);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='22' viewBox='0 0 90 22'%3E%3Cpolygon points='0,22 15,0 30,22' fill='%23E3262B'/%3E%3Cpolygon points='30,22 45,0 60,22' fill='%2322A447'/%3E%3Cpolygon points='60,22 75,0 90,22' fill='%232F3BC4'/%3E%3Cpolygon points='15,0 45,0 30,22' fill='%232F3BC4'/%3E%3Cpolygon points='45,0 75,0 60,22' fill='%23E3262B'/%3E%3Cpolygon points='75,0 105,0 90,22' fill='%2322A447'/%3E%3Cpolygon points='-15,0 15,0 0,22' fill='%2322A447'/%3E%3C/svg%3E");
+  background-size:90px 22px;background-repeat:repeat-x;
+}
+.tri.flip{transform:scaleY(-1)}
+
+.hero{background:var(--deep);color:#fff;position:relative;overflow:hidden}
+.hero::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(circle at 85% 20%, rgba(246,178,27,.25), transparent 45%),
+    radial-gradient(circle at 10% 90%, rgba(47,59,196,.35), transparent 45%);
+}
+.hero-inner{position:relative;max-width:640px;margin:0 auto;padding:28px 16px 34px;display:flex;gap:18px;align-items:center}
+.logo{width:108px;height:108px;flex:0 0 auto;border-radius:50%;background:#fff;box-shadow:0 0 0 5px rgba(255,255,255,.15),0 10px 30px rgba(0,0,0,.25)}
+.eyebrow{font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:.78rem;color:var(--yellow);margin:0 0 4px}
+.hero h1{font-size:clamp(1.9rem,6vw,2.6rem);font-weight:800}
+.hero h1 span{color:var(--yellow)}
+.hero p.sub{margin:6px 0 0;opacity:.9;font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:5px 11px;font-size:.86rem;font-weight:700}
+.chip svg{width:15px;height:15px;flex:0 0 auto}
+@media (max-width:520px){
+  .hero-inner{flex-direction:column;text-align:center;padding:18px 16px 30px;gap:12px}
+  .chips{justify-content:center;margin-top:10px}
+  .logo{width:84px;height:84px}
+  .eyebrow{font-size:.7rem}
+}
+
+main{max-width:640px;margin:-18px auto 0;padding:0 16px 40px;position:relative}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid rgba(230,217,188,.7)}
+form.card{padding:22px 20px 24px}
+
+.head{display:flex;gap:12px;align-items:flex-start;margin-bottom:18px}
+.head-ico{width:44px;height:44px;border-radius:14px;flex:0 0 auto;display:grid;place-items:center;color:#fff;background:var(--blue)}
+.head-ico svg{width:24px;height:24px}
+.head h2{font-size:1.45rem;color:var(--deep)}
+.head p{margin:2px 0 0;color:var(--muted);font-size:.95rem}
+
+.aviso{
+  display:flex;gap:10px;align-items:flex-start;background:#EEF0FC;border:2px solid #D6DAF6;color:#232C8F;
+  border-radius:14px;padding:11px 14px;margin-bottom:18px;font-size:.9rem;font-weight:700;
+}
+.aviso svg{width:20px;height:20px;flex:0 0 auto;margin-top:1px}
+.aviso a{color:inherit}
+
+.fields{display:grid;gap:16px}
+.field label{display:block;font-weight:800;font-size:.92rem;margin-bottom:6px}
+.req{color:var(--red)}
+.hint{font-size:.82rem;color:var(--muted);margin-top:5px}
+.input{
+  width:100%;min-height:50px;padding:11px 14px;border:2px solid var(--line);border-radius:12px;
+  background:#FFFDF8;font-size:1rem;transition:border-color .15s, box-shadow .15s, background .15s;
+  -webkit-appearance:none;appearance:none;
+}
+.input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 4px rgba(34,164,71,.16);background:#fff}
+.field.invalid .input{border-color:var(--error);background:#FFF6F6}
+.err{display:none;color:var(--error);font-size:.84rem;font-weight:700;margin-top:5px}
+.field.invalid .err{display:block}
+
+.check{display:flex;gap:12px;align-items:flex-start;cursor:pointer;padding:12px 14px;border-radius:14px;background:var(--cream);border:2px solid transparent;margin-top:18px}
+.check input{
+  -webkit-appearance:none;appearance:none;margin:1px 0 0;width:24px;height:24px;flex:0 0 auto;border-radius:7px;
+  border:2px solid #C9B98F;background:#fff;display:grid;place-items:center;cursor:pointer;transition:all .15s;
+}
+.check input::after{content:"";width:12px;height:7px;border-left:3px solid #fff;border-bottom:3px solid #fff;transform:rotate(-45deg) translate(1px,-1px) scale(0);transition:transform .15s}
+.check input:checked{background:var(--green);border-color:var(--green)}
+.check input:checked::after{transform:rotate(-45deg) translate(1px,-1px) scale(1)}
+.check input:focus-visible{box-shadow:0 0 0 4px rgba(34,164,71,.2)}
+.check span{font-weight:700;font-size:.93rem}
+.check small{display:block;font-weight:600;color:var(--muted);font-size:.83rem}
+.check.invalid{border-color:var(--error);background:#FFF6F6}
+
+.alert{display:none;gap:10px;align-items:flex-start;border-radius:14px;padding:12px 14px;margin-top:14px;background:#FFF0F0;color:#8E1318;border:2px solid #F5C2C4;font-weight:700;font-size:.92rem}
+.alert.on{display:flex}
+.alert svg{width:20px;height:20px;flex:0 0 auto;margin-top:1px}
+
+.btn{
+  min-height:54px;border-radius:14px;border:0;padding:0 20px;font-weight:800;font-size:1.05rem;cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .08s, background .15s, opacity .15s;
+}
+.btn:active{transform:scale(.98)}
+.btn svg{width:20px;height:20px}
+.btn-send{width:100%;margin-top:18px;background:var(--red);color:#fff;box-shadow:0 6px 16px rgba(227,38,43,.3)}
+.btn-send:hover{background:#C91F24}
+.btn-primary{background:var(--green);color:#fff;box-shadow:0 6px 16px rgba(34,164,71,.3)}
+.btn-primary:hover{background:#1C9140}
+.btn-ghost{background:#fff;color:var(--deep);border:2px solid var(--line)}
+.btn-ghost:hover{background:var(--cream-2)}
+.btn[disabled]{opacity:.65;cursor:wait}
+.spinner{width:20px;height:20px;border-radius:50%;border:3px solid rgba(255,255,255,.4);border-top-color:#fff;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.success{display:none;overflow:hidden;text-align:center}
+.success.on{display:block;animation:in .4s ease}
+.success-body{padding:26px 20px 24px}
+.check-big{width:78px;height:78px;border-radius:50%;background:var(--green);margin:0 auto 14px;display:grid;place-items:center;box-shadow:0 0 0 8px #DFF3E4}
+.check-big svg{width:40px;height:40px;color:#fff}
+.success h2{font-size:1.8rem;color:var(--deep)}
+.success p{color:var(--muted);font-weight:600;margin:6px 0 0}
+.ticket{margin:20px auto 0;max-width:440px;text-align:left;border:2px dashed var(--line);border-radius:16px;padding:16px;background:#FFFDF8}
+.ticket .proto{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.ticket .proto span{font-size:.8rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.ticket .proto b{font-family:"Baloo 2",sans-serif;font-size:1.35rem;color:var(--red);letter-spacing:.04em}
+.ticket dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:.95rem}
+.ticket dt{color:var(--muted);font-weight:700}
+.ticket dd{margin:0;font-weight:800;word-break:break-word}
+.ticket .when{margin-top:12px;padding-top:10px;border-top:1px solid var(--line);font-size:.88rem;font-weight:700;color:var(--deep)}
+.success-actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:20px}
+.success-actions .btn{flex:1 1 200px;max-width:260px}
+
+footer{text-align:center;color:var(--muted);font-size:.85rem;font-weight:600;padding:24px 16px 8px}
+footer b{color:var(--deep)}
+.credito{margin:14px 0 0;padding-top:12px;border-top:1px solid var(--line);font-size:.82rem}
+.credito a{color:var(--deep);font-weight:800;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(14,90,51,.35)}
+.credito a:hover{color:var(--green);text-decoration-color:currentColor}
+.credito .credito-num{white-space:nowrap;font-weight:700}
+.credito .coautora{display:inline-block;margin-top:4px}
+
+@media (prefers-reduced-motion:reduce){ .success.on{animation:none} }
+@media print{
+  .hero,.success-actions,footer,.tri{display:none!important}
+  body{background:#fff} main{margin:0;padding:0} .card{box-shadow:none;border:0}
+}
+</style>
+</head>
+<body>
+
+<div class="tri"></div>
+<header class="hero">
+  <div class="hero-inner">
+    <img class="logo" src="logo.png" alt="Logo Capoeira Porto Bahia" width="108" height="108">
+    <div>
+      <p class="eyebrow">Projeto Brincapoeira · Capoeira Porto Bahia</p>
+      <h1>Cadastro de <span>Visitantes</span></h1>
+      <p class="sub">Para capoeiristas de outros grupos que vêm ao Batizado</p>
+      <div class="chips" id="chips"></div>
+    </div>
+  </div>
+</header>
+<div class="tri flip"></div>
+
+<main>
+  <noscript><div class="card" style="padding:18px">Ative o JavaScript para preencher o cadastro.</div></noscript>
+
+  <form id="form" class="card" novalidate autocomplete="on">
+    <div class="head">
+      <div class="head-ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg>
+      </div>
+      <div>
+        <h2>Seus dados</h2>
+        <p>Leva menos de 1 minuto.</p>
+      </div>
+    </div>
+
+    <div class="aviso">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      <span>Este cadastro é só para <b>visitantes de outros grupos</b>. Alunos do Brincapoeira e suas famílias se cadastram em <a href="https://brincapoeira.com" target="_blank" rel="noopener">brincapoeira.com</a>.</span>
+    </div>
+
+    <div class="fields">
+      <div class="field">
+        <label for="nome">Nome completo <span class="req">*</span></label>
+        <input class="input" id="nome" name="nome" type="text" autocomplete="name" maxlength="120" placeholder="Ex.: João Carlos da Silva" data-required data-minwords="2">
+        <div class="err">Informe nome e sobrenome.</div>
+      </div>
+      <div class="field">
+        <label for="tel">Telefone / WhatsApp <span class="req">*</span></label>
+        <input class="input" id="tel" name="tel" type="tel" inputmode="tel" autocomplete="tel" maxlength="16" placeholder="(51) 99999-9999" data-required data-phone>
+        <div class="err">Informe um número com DDD.</div>
+      </div>
+      <div class="field">
+        <label for="cpf">CPF <span class="req">*</span></label>
+        <input class="input" id="cpf" name="cpf" type="text" inputmode="numeric" maxlength="14" placeholder="000.000.000-00" data-required data-cpf>
+        <div class="err">CPF inválido. Confira os números.</div>
+      </div>
+      <div class="field">
+        <label for="grupo">Grupo de capoeira que pertence <span class="req">*</span></label>
+        <input class="input" id="grupo" name="grupo" type="text" maxlength="100" placeholder="Ex.: Grupo Muzenza, Abadá, Cordão de Ouro…" data-required>
+        <div class="err">Informe o nome do seu grupo.</div>
+        <div class="hint">Se quiser, coloque também a cidade ou o nome do seu mestre.</div>
+      </div>
+    </div>
+
+    <label class="check" id="c_ciente">
+      <input type="checkbox" id="ciente">
+      <span>Confirmo que os dados estão corretos <span class="req">*</span>
+        <small>Eles ficam só com a organização do evento, para a lista de entrada.</small></span>
+    </label>
+
+    <div class="alert" id="alert" role="alert">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+      <span id="alert-msg"></span>
+    </div>
+
+    <button type="submit" class="btn btn-send" id="btn-send">
+      Enviar cadastro
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+    </button>
+  </form>
+
+  <section class="card success" id="success" aria-live="polite">
+    <div class="tri"></div>
+    <div class="success-body">
+      <div class="check-big"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+      <h2>Cadastro enviado!</h2>
+      <p>Seu nome já está na lista de entrada.</p>
+      <div class="ticket">
+        <div class="proto"><span>Protocolo</span><b id="s-proto"></b></div>
+        <dl id="s-dados"></dl>
+        <div class="when" id="s-when"></div>
+      </div>
+      <div class="success-actions">
+        <button type="button" class="btn btn-primary" id="btn-outro">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          Cadastrar outra pessoa
+        </button>
+        <button type="button" class="btn btn-ghost" id="btn-print">Salvar comprovante</button>
+      </div>
+      <p class="hint" style="margin-top:12px">Vieram mais pessoas do seu grupo? Em “Cadastrar outra pessoa” o nome do grupo já vem preenchido.</p>
+    </div>
+  </section>
+
+  <footer>
+    <b>Projeto Brincapoeira</b> · Capoeira Porto Bahia<br>
+    <span id="foot-local"></span>
+    <p class="credito">Site feito por <a href="https://wa.me/5551986460227" target="_blank" rel="noopener">Thales dos Santos Leal</a> · <a class="credito-num" href="https://wa.me/5551986460227" target="_blank" rel="noopener">(51) 98646-0227</a><br><span class="coautora">Coautora: <b>Mayara Santos</b></span></p>
+  </footer>
+</main>
+
+<script>
+/* =====================================================================
+   CONFIGURAÇÃO — edite aqui
+   ===================================================================== */
+const CONFIG = {
+  // Cole aqui a URL do App Script DA PLANILHA DE VISITANTES (termina com /exec). Veja o LEIAME.
+  SCRIPT_URL: "",
+
+  EVENTO: {
+    data: "28 de novembro",
+    horario: "9h às 12h",
+    local: "IFSul Campus Sapucaia do Sul"
+  }
+};
+</script>
+
+<script>
+(function(){
+"use strict";
+const $ = (s, el=document) => el.querySelector(s);
+const $$ = (s, el=document) => Array.from(el.querySelectorAll(s));
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const DRAFT_KEY = "brincapoeira-visitante-rascunho";
+const store = {
+  get(){ try{ return JSON.parse(localStorage.getItem(DRAFT_KEY) || "null"); }catch(e){ return null; } },
+  set(v){ try{ localStorage.setItem(DRAFT_KEY, JSON.stringify(v)); }catch(e){} },
+  clear(){ try{ localStorage.removeItem(DRAFT_KEY); }catch(e){} }
+};
+
+/* ---------- topo ---------- */
+const E = CONFIG.EVENTO;
+const ico = {
+  cal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
+  clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>',
+  pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>'
+};
+$("#chips").innerHTML =
+  `<span class="chip">${ico.cal}${esc(E.data)}</span>`+
+  `<span class="chip">${ico.clock}${esc(E.horario)}</span>`+
+  `<span class="chip">${ico.pin}${esc(E.local)}</span>`;
+$("#foot-local").textContent = `${E.data} · ${E.horario} · ${E.local}`;
+
+/* ---------- máscaras ---------- */
+function maskPhone(v){
+  const d = v.replace(/\D/g,"").slice(0,11);
+  if (d.length <= 2) return d.length ? "(" + d : "";
+  if (d.length <= 6) return `(${d.slice(0,2)}) ${d.slice(2)}`;
+  if (d.length <= 10) return `(${d.slice(0,2)}) ${d.slice(2,6)}-${d.slice(6)}`;
+  return `(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`;
+}
+function maskCPF(v){
+  const d = v.replace(/\D/g,"").slice(0,11);
+  return d.replace(/^(\d{3})(\d)/, "$1.$2").replace(/^(\d{3})\.(\d{3})(\d)/, "$1.$2.$3").replace(/\.(\d{3})(\d{1,2})$/, ".$1-$2");
+}
+function cpfValido(v){
+  const d = v.replace(/\D/g,"");
+  if (d.length !== 11 || /^(\d)\1{10}$/.test(d)) return false;
+  for (let t = 9; t < 11; t++){
+    let s = 0;
+    for (let i = 0; i < t; i++) s += +d[i] * (t + 1 - i);
+    if (((s * 10) % 11) % 10 !== +d[t]) return false;
+  }
+  return true;
+}
+
+document.addEventListener("input", e => {
+  const t = e.target;
+  if (t.matches("[data-phone]")) t.value = maskPhone(t.value);
+  if (t.matches("[data-cpf]")) t.value = maskCPF(t.value);
+  const f = t.closest(".field"); if (f && f.classList.contains("invalid")) validateField(f);
+  if (t.id === "ciente") $("#c_ciente").classList.remove("invalid");
+  saveDraft();
+});
+document.addEventListener("change", saveDraft);
+
+/* ---------- validação ---------- */
+function validateField(f){
+  const inp = $(".input", f);
+  const v = inp.value.trim();
+  let ok = true;
+  if (inp.hasAttribute("data-required") && !v) ok = false;
+  if (ok && v && inp.dataset.minwords) ok = v.split(/\s+/).length >= +inp.dataset.minwords;
+  if (ok && v && inp.hasAttribute("data-phone")) ok = v.replace(/\D/g,"").length >= 10;
+  if (ok && v && inp.hasAttribute("data-cpf")) ok = cpfValido(v);
+  f.classList.toggle("invalid", !ok);
+  return ok;
+}
+function validateAll(){
+  let ok = true, first = null;
+  $$(".field").forEach(f => { if (!validateField(f)) { ok = false; first = first || f; } });
+  if (!$("#ciente").checked) { $("#c_ciente").classList.add("invalid"); ok = false; first = first || $("#c_ciente"); }
+  if (first) {
+    first.scrollIntoView({behavior:"smooth", block:"center"});
+    const inp = $("input", first); if (inp) setTimeout(() => inp.focus({preventScroll:true}), 300);
+  }
+  return ok;
+}
+
+function collect(){
+  return {
+    nome: $("#nome").value.trim(),
+    telefone: $("#tel").value.trim(),
+    cpf: $("#cpf").value.trim(),
+    grupo: $("#grupo").value.trim(),
+    ciente: $("#ciente").checked
+  };
+}
+
+/* ---------- envio ---------- */
+function protocolo(){
+  const abc = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let s = ""; const rnd = new Uint32Array(6); (window.crypto || window.msCrypto).getRandomValues(rnd);
+  rnd.forEach(n => s += abc[n % abc.length]);
+  return "VS-" + s;
+}
+function showError(msg){ $("#alert-msg").textContent = msg; $("#alert").classList.add("on"); $("#alert").scrollIntoView({behavior:"smooth", block:"center"}); }
+let sending = false;
+let currentProto = null;
+
+$("#form").addEventListener("submit", async e => {
+  e.preventDefault();
+  if (sending || !validateAll()) return;
+  const url = (CONFIG.SCRIPT_URL || "").trim();
+  if (!url) { showError("Este formulário ainda não está conectado à planilha. Avise a organização do evento (falta configurar o SCRIPT_URL)."); return; }
+
+  const data = collect();
+  // mesmo protocolo em todas as tentativas: se a resposta se perder e a pessoa reenviar, a planilha não duplica
+  if (!currentProto) { currentProto = protocolo(); saveDraft(); }
+  data.protocolo = currentProto;
+
+  sending = true;
+  const btn = $("#btn-send"), old = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Enviando…';
+  $("#alert").classList.remove("on");
+
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {"Content-Type": "text/plain;charset=utf-8"},
+      body: JSON.stringify(data),
+      redirect: "follow"
+    });
+    const text = await res.text();
+    let json = null;
+    try { json = JSON.parse(text); } catch(err) {}
+    if (!json) throw new Error("A planilha não respondeu corretamente. Confira se o App Script foi implantado com acesso para “Qualquer pessoa”.");
+    if (!json.ok) throw new Error(json.erro || "Não foi possível salvar o cadastro.");
+    store.clear();
+    currentProto = null;
+    showSuccess(data, json.protocolo || data.protocolo);
+  } catch (err) {
+    if (!navigator.onLine) showError("Você está sem internet. Conecte-se e toque em “Enviar cadastro” de novo — seus dados continuam aqui.");
+    else if (err instanceof TypeError) showError("Não conseguimos falar com a planilha. Tente de novo em alguns segundos — seus dados continuam aqui.");
+    else showError(err.message);
+  } finally {
+    sending = false; btn.disabled = false; btn.innerHTML = old;
+  }
+});
+
+/* ---------- sucesso ---------- */
+let lastGrupo = "";
+function showSuccess(d, proto){
+  lastGrupo = d.grupo;
+  $("#form").style.display = "none";
+  $("#s-proto").textContent = proto;
+  $("#s-dados").innerHTML =
+    `<dt>Nome</dt><dd>${esc(d.nome)}</dd>`+
+    `<dt>Grupo</dt><dd>${esc(d.grupo)}</dd>`+
+    `<dt>Telefone</dt><dd>${esc(d.telefone)}</dd>`;
+  $("#s-when").textContent = `${E.data} · ${E.horario} · ${E.local}`;
+  $("#success").classList.add("on");
+  window.scrollTo({top: 0, behavior: "smooth"});
+}
+$("#btn-print").addEventListener("click", () => window.print());
+$("#btn-outro").addEventListener("click", () => {
+  currentProto = null;
+  $("#form").reset();
+  $("#grupo").value = lastGrupo;
+  $$(".invalid").forEach(el => el.classList.remove("invalid"));
+  $("#alert").classList.remove("on");
+  $("#success").classList.remove("on");
+  $("#form").style.display = "";
+  window.scrollTo({top: 0, behavior: "smooth"});
+  $("#nome").focus({preventScroll:true});
+});
+
+/* ---------- rascunho ---------- */
+let restoring = false;
+function saveDraft(){ if (!restoring) store.set({ d: collect(), proto: currentProto }); }
+(function restore(){
+  const s = store.get(); if (!s || !s.d) return;
+  restoring = true;
+  currentProto = s.proto || null;
+  $("#nome").value = s.d.nome || ""; $("#tel").value = s.d.telefone || "";
+  $("#cpf").value = s.d.cpf || ""; $("#grupo").value = s.d.grupo || "";
+  restoring = false;
+})();
+})();
+</script>
+</body>
+</html>
