@@ -13,6 +13,13 @@ var ABA = 'Visitantes';
 var FUSO = 'America/Sao_Paulo';
 var CABECALHO = ['Data/hora', 'Protocolo', 'Nome', 'Telefone', 'CPF', 'Grupo', 'Presença'];
 var COR = '#2F3BC4';
+var LARGURAS = [150, 115, 250, 145, 135, 230, 95];
+// Planilha "visitantes brincapoeira" — usada se o script não estiver dentro dela
+var PLANILHA_ID = '1jO9aUHQwGGKkoLPbHRbgs-9lG3zjBgY5QohQgKmF9qo';
+
+function planilha() {
+  return SpreadsheetApp.getActiveSpreadsheet() || SpreadsheetApp.openById(PLANILHA_ID);
+}
 
 /* ------------------------------------------------------------------ */
 
@@ -31,7 +38,7 @@ function doPost(e) {
     var carimbo = Utilities.formatDate(new Date(), FUSO, 'dd/MM/yyyy HH:mm:ss');
     var linha = montarLinha(dados, carimbo);
 
-    var aba = garantirAba(SpreadsheetApp.getActiveSpreadsheet());
+    var aba = garantirAba(planilha());
     if (protocoloJaExiste(aba, linha.protocolo)) {
       return resposta({ ok: true, protocolo: linha.protocolo, duplicado: true });
     }
@@ -109,14 +116,53 @@ function garantirAba(ss) {
     aba.insertColumnsAfter(aba.getMaxColumns(), CABECALHO.length - aba.getMaxColumns());
   }
   var faixa = aba.getRange(1, 1, 1, CABECALHO.length);
-  if (faixa.getDisplayValues()[0].join('|') !== CABECALHO.join('|')) {
-    faixa.setValues([CABECALHO])
-      .setFontWeight('bold').setFontColor('#FFFFFF').setBackground(COR).setVerticalAlignment('middle');
-    aba.setFrozenRows(1);
-    aba.setRowHeight(1, 32);
-    if (nova) aba.setColumnWidths(1, CABECALHO.length, 170);
+  if (nova || faixa.getDisplayValues()[0].join('|') !== CABECALHO.join('|')) {
+    faixa.setValues([CABECALHO]);
+    formatar(aba);
   }
   return aba;
+}
+
+/** Visual da planilha: cabeçalho azul, linhas zebradas, filtro e verde em quem já entrou. */
+function formatar(aba) {
+  var n = CABECALHO.length;
+  if (aba.getMaxColumns() > n) aba.deleteColumns(n + 1, aba.getMaxColumns() - n);
+  if (aba.getMaxRows() < 300) aba.insertRowsAfter(aba.getMaxRows(), 300 - aba.getMaxRows());
+  var linhas = aba.getMaxRows();
+  var tudo = aba.getRange(1, 1, linhas, n);
+
+  aba.setHiddenGridlines(true);
+  tudo.setFontFamily('Nunito').setFontSize(11).setFontColor('#1D2A22')
+    .setVerticalAlignment('middle').setWrap(false);
+  LARGURAS.forEach(function (w, i) { aba.setColumnWidth(i + 1, w); });
+  // datas, protocolo, telefone, CPF e presença centralizados
+  [1, 2, 4, 5, 7].forEach(function (c) { aba.getRange(1, c, linhas, 1).setHorizontalAlignment('center'); });
+  aba.getRange(2, 3, linhas - 1, 1).setFontWeight('bold');
+  aba.getRange(2, 2, linhas - 1, 1).setFontColor('#E3262B').setFontWeight('bold');
+  aba.getRange(2, 1, linhas - 1, 1).setFontColor('#5C6A61').setFontSize(10);
+
+  aba.getBandings().forEach(function (b) { b.remove(); });
+  tudo.applyRowBanding(SpreadsheetApp.BandingTheme.BLUE, true, false)
+    .setHeaderRowColor(COR).setFirstRowColor('#FFFFFF').setSecondRowColor('#F1F3FD');
+
+  aba.getRange(1, 1, 1, n).setFontWeight('bold').setFontColor('#FFFFFF').setFontSize(11)
+    .setHorizontalAlignment('center');
+  aba.setFrozenRows(1);
+  aba.setRowHeight(1, 38);
+  aba.setRowHeights(2, linhas - 1, 28);
+  tudo.setBorder(null, null, true, null, null, true, '#E1E4F5', SpreadsheetApp.BorderStyle.SOLID);
+
+  // quem já entrou (caixinha marcada) fica verde
+  var dados = aba.getRange(2, 1, linhas - 1, n);
+  aba.setConditionalFormatRules([
+    SpreadsheetApp.newConditionalFormatRule()
+      .whenFormulaSatisfied('=$G2=TRUE')
+      .setBackground('#DFF3E4').setFontColor('#0E5A33')
+      .setRanges([dados]).build()
+  ]);
+
+  if (aba.getFilter()) aba.getFilter().remove();
+  tudo.createFilter();
 }
 
 function protocoloJaExiste(aba, protocolo) {
@@ -128,13 +174,14 @@ function protocoloJaExiste(aba, protocolo) {
 /** Menu "Brincapoeira" na planilha. */
 function onOpen() {
   SpreadsheetApp.getUi().createMenu('Brincapoeira')
-    .addItem('Arrumar planilha (cabeçalho e linhas vazias)', 'arrumarPlanilha')
+    .addItem('Arrumar e deixar bonita', 'arrumarPlanilha')
     .addToUi();
 }
 
 function arrumarPlanilha() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var ss = planilha();
   var aba = garantirAba(ss);
+  formatar(aba);
   var removidas = 0, ultima = aba.getLastRow();
   if (ultima >= 2) {
     var nomes = aba.getRange(2, 3, ultima - 1, 1).getDisplayValues();
